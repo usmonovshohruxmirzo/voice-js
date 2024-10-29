@@ -64,6 +64,32 @@ recognition
 recognition.stopSpeech();
 ```
 
+```javascript
+document
+  .querySelector("#speech")
+  .addEventListener("click", () =>
+    textToSpeech(
+      "Весной на смену суровым зимним морозам приходит тепло и природа оживает. В середине марта начинает таять снег и распускаются первые цветы. На деревьях появляются листья. Дни становятся длиннее.",
+      "ru-RU",
+      1,
+      1,
+      1,
+      1
+    )
+  );
+
+document.getElementById("speak").addEventListener("click", () => {
+  speechToText()
+    .getTranscript()
+    .then((transcript) => {
+      document.getElementById("transcript").innerText = transcript;
+    });
+});
+
+console.log(getVoices());
+
+```
+
 #### Methods:
 
 - `getTranscript()`: Starts listening and returns a promise that resolves to the recognized text.
