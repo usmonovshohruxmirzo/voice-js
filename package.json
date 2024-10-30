@@ -1,0 +1,14 @@
+{
+  "name": "@webbro-software/voice-js",
+  "version": "1.0.1",
+  "private": false,
+  "description": "Browser Voice Api",
+  "main": "index.js",
+  "type": "commonjs",
+  "module": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Usmonov Shoxruxmirzo",
+  "license": "ISC"
+}
