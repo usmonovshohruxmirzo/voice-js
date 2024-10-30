@@ -1,11 +1,11 @@
-# u-voice-js
+# voice-js
 
-`u-voice-js` is a simple JavaScript library for speech synthesis and speech recognition. It allows you to convert text to speech and recognize speech input, making it ideal for adding voice capabilities to web applications.
+`voice-js` is a simple JavaScript library for speech synthesis and speech recognition. It allows you to convert text to speech and recognize speech input, making it ideal for adding voice capabilities to web applications.
 
 ## Installation
 
 ```bash
-npm install @webbro-software/u-voice-js
+npm install @webbro-software/voice-js
 ```
 
 ## Features
@@ -25,7 +25,7 @@ const {
   textToSpeech,
   speechToText,
   getVoices,
-} = require("@webbro-software/u-voice-js");
+} = require("@webbro-software/voice-js");
 ```
 
 ### 1. Text-to-Speech
