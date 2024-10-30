@@ -7,8 +7,18 @@
   "type": "commonjs",
   "module": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "dev": "node index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webbro-software/voice-js"
+  },
+  "keywords": [
+    "text to speech",
+    "speech to text",
+    "web speech api",
+    "voice"
+  ],
   "author": "Usmonov Shoxruxmirzo",
-  "license": "ISC"
+  "license": "MIT"
 }
