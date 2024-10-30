@@ -1,7 +1,3 @@
-Here's an example of a `README.md` file for your `u-voice-js` package, which provides speech-to-text and text-to-speech functionality. It includes installation, usage examples, and explanations of each function.
-
----
-
 # u-voice-js
 
 `u-voice-js` is a simple JavaScript library for speech synthesis and speech recognition. It allows you to convert text to speech and recognize speech input, making it ideal for adding voice capabilities to web applications.
