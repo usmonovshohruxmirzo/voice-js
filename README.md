@@ -1,6 +1,6 @@
 # voice-js
 
-`voice-js` is a simple JavaScript library for speech synthesis and speech recognition. It allows you to convert text to speech and recognize speech input, making it ideal for adding voice capabilities to web applications.
+`voice-js` is a JavaScript library for converting text to speech and speech to text, with customizable options for language, volume, rate, and pitch. It also provides a utility to fetch available voices for enhanced text-to-speech experiences.
 
 ## Installation
 
@@ -10,45 +10,46 @@ npm install @webbro-software/voice-js
 
 ## Features
 
-- **Text-to-Speech**: Converts text to spoken audio with customizable options.
-- **Speech-to-Text**: Converts spoken words to text using the Web Speech API.
-- **Voice Management**: Retrieves available voices for text-to-speech.
+- **Text-to-Speech**: Convert text to spoken audio with customizable settings.
+- **Speech-to-Text**: Convert spoken words to text using the Web Speech API.
+- **Voice Management**: Retrieve available voices for text-to-speech, with error handling for unsupported environments.
 
 ## Usage
 
-### Import the Library
-
-After installation, you can import and use the functions in your code:
+### Importing the Library
 
 ```javascript
-const {
-  textToSpeech,
+import {
   speechToText,
+  textToSpeech,
   getVoices,
-} = require("@webbro-software/voice-js");
+} from "@webbro-software/voice-js";
 ```
 
 ### 1. Text-to-Speech
 
-The `textToSpeech` function converts text into spoken audio.
+The `textToSpeech` function converts provided text into spoken audio, with options for language, volume, rate, pitch, and voice.
 
 #### Example:
 
 ```javascript
-textToSpeech("Hello, world!", "en-US", 1, 1, 1);
+textToSpeech("Hello, world!", "en-US", 1, 1, 1, 5);
 ```
 
 #### Parameters:
 
 - `text` (string): Text to be spoken.
 - `lang` (string): Language code for the voice (default: `"en-US"`).
-- `volume` (number): Volume of the speech (0 to 1, default: `1`).
-- `rate` (number): Speed of the speech (0.1 to 10, default: `1`).
-- `pitch` (number): Pitch of the speech (0 to 2, default: `1`).
+- `volume` (number): Volume of the speech (range: `0` to `1`, default: `1`).
+- `rate` (number): Speed of the speech (range: `0.1` to `10`, default: `1`).
+- `pitch` (number): Pitch of the speech (range: `0` to `2`, default: `1`).
+- `voice` (number): Index of the voice to use from the available voices list (default: `5`).
+
+**Note**: Voice availability and the exact number of voices vary across browsers.
 
 ### 2. Speech-to-Text
 
-The `speechToText` function listens to spoken input and converts it to text.
+The `speechToText` function listens to spoken input and returns it as a text string.
 
 #### Example:
 
@@ -64,40 +65,14 @@ recognition
 recognition.stopSpeech();
 ```
 
-```javascript
-document
-  .querySelector("#speech")
-  .addEventListener("click", () =>
-    textToSpeech(
-      "Весной на смену суровым зимним морозам приходит тепло и природа оживает. В середине марта начинает таять снег и распускаются первые цветы. На деревьях появляются листья. Дни становятся длиннее.",
-      "ru-RU",
-      1,
-      1,
-      1,
-      1
-    )
-  );
-
-document.getElementById("speak").addEventListener("click", () => {
-  speechToText()
-    .getTranscript()
-    .then((transcript) => {
-      document.getElementById("transcript").innerText = transcript;
-    });
-});
-
-console.log(getVoices());
-
-```
-
 #### Methods:
 
-- `getTranscript()`: Starts listening and returns a promise that resolves to the recognized text.
-- `stopSpeech()`: Stops the speech recognition session.
+- `getTranscript()`: Starts listening and returns a promise with the recognized text. Includes error handling for issues such as unsupported environments or recognition failures.
+- `stopSpeech()`: Stops the current speech recognition session manually.
 
 ### 3. Get Available Voices
 
-The `getVoices` function retrieves all available voices for text-to-speech.
+The `getVoices` function retrieves all available voices for text-to-speech, useful for selecting specific voices.
 
 #### Example:
 
@@ -107,16 +82,17 @@ getVoices();
 
 #### Usage:
 
-This function outputs the list of available voices to the console, allowing you to choose specific voices for `textToSpeech`.
+The `getVoices` function logs the list of available voices to the console when `window.speechSynthesis.onvoiceschanged` fires, which occurs when new voices are loaded. This allows you to inspect and select voices for `textToSpeech`.
+
+### Error Handling
+
+- **`speechToText`**: Throws errors if the Web Speech API isn’t supported. Provides meaningful error messages if recognition fails, such as `"Speech recognition error: network"` or `"Speech recognition ended without capturing results."`
+- **`textToSpeech` and `getVoices`**: Both functions check for browser compatibility and handle unsupported environments gracefully.
 
 ## Browser Compatibility
 
-This library relies on the Web Speech API, which is supported in most modern browsers, particularly Chrome. Ensure that users have microphone access enabled for speech recognition.
-
-## Error Handling
-
-Both `textToSpeech` and `speechToText` handle unsupported environments gracefully by logging an error if the Web Speech API is unavailable.
+This library uses the Web Speech API, supported by most modern browsers. For speech recognition, ensure microphone access is enabled in the browser.
 
 ## License
 
-MIT License. See [LICENSE](./LICENSE) for more information.
+MIT License. See [LICENSE](./LICENSE) for more details.
