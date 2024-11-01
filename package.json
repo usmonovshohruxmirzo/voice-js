@@ -1,6 +1,6 @@
 {
   "name": "@webbro-software/voice-js",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "private": false,
   "description": "Web Speech Api",
   "main": "index.js",

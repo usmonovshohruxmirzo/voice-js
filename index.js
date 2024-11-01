@@ -1,6 +1,6 @@
 const isBrowser = typeof window !== "undefined";
 
-const speechToText = () => {
+const speechToText = (continuous = false) => {
   if (
     !isBrowser ||
     (!window.SpeechRecognition && !window.webkitSpeechRecognition)
@@ -10,6 +10,8 @@ const speechToText = () => {
 
   const recognition = new (window.SpeechRecognition ||
     window.webkitSpeechRecognition)();
+
+  recognition.continuous = continuous;
   recognition.start();
 
   return {
@@ -25,9 +27,13 @@ const speechToText = () => {
           reject(new Error("Speech recognition error: " + e.error));
         });
         recognition.addEventListener("end", () => {
-          reject(
-            new Error("Speech recognition ended without capturing results.")
-          );
+          if (!continuous) {
+            reject(
+              new Error("Speech recognition ended without capturing results.")
+            );
+          } else {
+            recognition.start();
+          }
         });
       });
     },
@@ -43,38 +49,58 @@ const textToSpeech = (
   volume = 1,
   rate = 1,
   pitch = 1,
-  voice = 5
+  voiceIndex = 5
 ) => {
-  if (!isBrowser) return;
+  if (!isBrowser)
+    return Promise.reject(
+      "Text-to-Speech is not supported in this environment."
+    );
 
-  try {
-    const speech = new SpeechSynthesisUtterance();
-    const voices = window.speechSynthesis.getVoices();
+  return new Promise((resolve, reject) => {
+    try {
+      const speech = new SpeechSynthesisUtterance();
+      const voices = window.speechSynthesis.getVoices();
 
-    speech.text = text;
-    speech.lang = lang;
-    speech.volume = volume;
-    speech.rate = rate;
-    speech.pitch = pitch;
-    speech.voice = voices[voice];
+      if (voiceIndex < voices.length) {
+        speech.voice = voices[voiceIndex];
+      } else {
+        console.warn("Voice index out of range, using default voice.");
+      }
 
-    window.speechSynthesis.speak(speech);
-  } catch (error) {
-    console.log(error.message);
-  }
+      speech.text = text;
+      speech.lang = lang;
+      speech.volume = volume;
+      speech.rate = rate;
+      speech.pitch = pitch;
+
+      speech.onend = resolve;
+      speech.onerror = (e) =>
+        reject(new Error("Text-to-Speech error: " + e.error));
+
+      window.speechSynthesis.speak(speech);
+    } catch (error) {
+      reject(new Error(error.message));
+    }
+  });
 };
 
 const getVoices = () => {
-  if (!isBrowser) return;
+  if (!isBrowser) return [];
 
-  try {
-    window.speechSynthesis.onvoiceschanged = () => {
+  return new Promise((resolve, reject) => {
+    try {
       const voices = window.speechSynthesis.getVoices();
-      console.log("Available Voices:", voices);
-    };
-  } catch (error) {
-    console.log(error.message);
-  }
+      if (voices.length) {
+        resolve(voices);
+      } else {
+        window.speechSynthesis.onvoiceschanged = () => {
+          resolve(window.speechSynthesis.getVoices());
+        };
+      }
+    } catch (error) {
+      reject(new Error("Failed to get voices: " + error.message));
+    }
+  });
 };
 
 export { speechToText, textToSpeech, getVoices };
