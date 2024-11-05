@@ -96,3 +96,7 @@ This library uses the Web Speech API, supported by most modern browsers. For spe
 ## License
 
 MIT License. See [LICENSE](./LICENSE) for more details.
+
+---
+
+![NPM Downloads](https://img.shields.io/npm/dw/@webbro-software/voice-js)
